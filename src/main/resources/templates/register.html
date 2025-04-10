@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-
+ 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/register.css}">
-    <title>Resister</title>
+    <title>注册页面</title>
 </head>
-
+ 
 <body>
-    <div class="register-form">
-        <h2>User Registration</h2>
-        <input type="text" id="loginAccount" placeholder="Login Account: Please enter the login account">
-        <input type="password" id="password" placeholder="Password: Please enter the password">
-        <input type="password" id="confirmPassword" placeholder="Confirm Password: Please enter the password again">
-        <input type="text" id="name" placeholder="Name: Please enter your name">
-        <input type="text" id="idCard" placeholder="ID Card Number: Please enter an 18-digit ID card number">
-        <input type="text" id="birthDate" placeholder="Date of Birth: Format: yyyy-mm-dd">
-        <input type="text" id="address" placeholder="Address: Please enter your address">
-        <input type="text" id="postcode" placeholder="Postcode: Please enter a 6-digit postcode">
-        <input type="text" id="email" placeholder="E-mail: Please enter your email">
-        <button onclick="register()">Register</button>
-    </div>
-
-    <script src="../static/js/register.js"></script>
+    <form id="registerForm">
+        <label for="username">用户名：</label><input type="text" id="username" required><br>
+        <label for="password">密码：</label><input type="password" id="password" required><br>
+        <label for="confirmPassword">确认密码：</label><input type="password" id="confirmPassword" required><br>
+        <label for="email">邮箱：</label><input type="email" id="email" required><br>
+        <input type="submit" value="注册">
+    </form>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        if (password!== confirmPassword) {
+            alert('两次密码不一致');
+            return;
+        }
+    });
+</script>
 </body>
-
+ 
 </html>
+
