@@ -1,7 +1,7 @@
-package com.hongming.academic_map.controller;
+package com.academic_map.controller;
 
-import com.hongming.academic_map.model.User;
-import com.hongming.academic_map.repository.UserRepository;
+import com.academic_map.model.User;
+import com.academic_map.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;

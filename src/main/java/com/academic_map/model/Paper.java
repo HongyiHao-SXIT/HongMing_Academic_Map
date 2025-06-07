@@ -1,4 +1,4 @@
-package com.hongming.academic_map.model;
+package com.academic_map.model;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,6 +1,6 @@
-package com.hongming.academic_map.repository;
+package com.academic_map.repository;
 
-import com.hongming.academic_map.model.User;
+import com.academic_map.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

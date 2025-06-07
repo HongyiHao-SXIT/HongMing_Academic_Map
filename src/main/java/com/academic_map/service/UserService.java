@@ -1,7 +1,7 @@
-package com.hongming.academic_map.service;
+package com.academic_map.service;
 
-import com.hongming.academic_map.model.User;
-import com.hongming.academic_map.repository.UserRepository;
+import com.academic_map.model.User;
+import com.academic_map.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,7 +1,7 @@
-package com.hongming.academic_map.service;
+package com.academic_map.service;
 
-import com.hongming.academic_map.model.Paper;
-import com.hongming.academic_map.repository.PaperRepository;
+import com.academic_map.model.Paper;
+import com.academic_map.repository.PaperRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

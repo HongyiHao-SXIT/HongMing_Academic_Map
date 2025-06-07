@@ -1,6 +1,6 @@
-package com.hongming.academic_map.repository;
+package com.academic_map.repository;
 
-import com.hongming.academic_map.model.Paper;
+import com.academic_map.model.Paper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

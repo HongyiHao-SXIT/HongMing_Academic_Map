@@ -1,9 +1,9 @@
-package com.hongming.academic_map.controller;
+package com.academic_map.controller;
 
-import com.hongming.academic_map.model.Paper;
-import com.hongming.academic_map.model.User;
-import com.hongming.academic_map.repository.PaperRepository;
-import com.hongming.academic_map.repository.UserRepository;
+import com.academic_map.model.Paper;
+import com.academic_map.model.User;
+import com.academic_map.repository.PaperRepository;
+import com.academic_map.repository.UserRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

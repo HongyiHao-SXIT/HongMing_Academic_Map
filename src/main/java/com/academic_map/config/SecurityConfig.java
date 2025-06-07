@@ -1,6 +1,6 @@
-package com.hongming.academic_map.config;
+package com.academic_map.config;
 
-import com.hongming.academic_map.service.UserService;
+import com.academic_map.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;

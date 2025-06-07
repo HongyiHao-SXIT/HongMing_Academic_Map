@@ -1,4 +1,4 @@
-package com.hongming.academic_map;
+package com.academic_map;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
