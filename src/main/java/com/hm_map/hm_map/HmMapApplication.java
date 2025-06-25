@@ -1,13 +1,13 @@
-package com.hongming.academic_map;
+package com.hm_map.hm_map;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AcademicMapApplication {
+public class HmMapApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AcademicMapApplication.class, args);
+		SpringApplication.run(HmMapApplication.class, args);
 	}
 
 }

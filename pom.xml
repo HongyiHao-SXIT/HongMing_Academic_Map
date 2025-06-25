@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.0</version>
+		<version>3.5.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.hongming</groupId>
-	<artifactId>academic_map</artifactId>
+	<groupId>com.hm_map</groupId>
+	<artifactId>hm_map</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>academic_map</name>
+	<name>hm_map</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -36,11 +36,19 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
 		</dependency>
 
 		<dependency>
@@ -65,18 +73,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-        	<groupId>org.springframework.boot</groupId>
-        	<artifactId>spring-boot-starter-security</artifactId>
-    	</dependency>
-		<dependency>
-    		<groupId>org.thymeleaf.extras</groupId>
-    		<artifactId>thymeleaf-extras-springsecurity6</artifactId>
-    		<version>3.1.1.RELEASE</version>
-		</dependency>
-		<dependency>
-    		<groupId>jakarta.validation</groupId>
-    		<artifactId>jakarta.validation-api</artifactId>
-    		<version>3.0.2</version>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
