@@ -2,27 +2,37 @@ package com.hm_map.hm_map.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Table(name = "users")
+@Entity
+@Table(name = "user")
 public class User {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String username;
+    private String name;
 
-    @Column(nullable = false)
+    private String account;
+
     private String password;
 
-    private String email;
+    @Temporal(TemporalType.DATE)
+    private Date birthday;
 
-    private String school;
+    private String intro;
 
-    private LocalDateTime registerTime;
+    private String organization;
+
+    private String department;
+
+    private String address;
+
+    private String postCode;
+
+    private String field;
 }
