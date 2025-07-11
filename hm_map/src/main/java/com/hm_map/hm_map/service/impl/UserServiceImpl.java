@@ -18,14 +18,27 @@ public class UserServiceImpl implements UserService {
     public User register(User user) {
         Optional<User> existing = userRepository.findByAccount(user.getAccount());
         if (existing.isPresent()) {
-            throw new RuntimeException("该账号已被注册");
+            throw new RuntimeException("This account has already been registered.");
         }
         return userRepository.save(user);
     }
 
+
     @Override
     public User login(String account, String password) {
         return userRepository.findByAccountAndPassword(account, password)
-                .orElseThrow(() -> new RuntimeException("账号或密码错误"));
+                .orElseThrow(() -> new RuntimeException("Invalid account or password."));
+    }
+
+    @Override
+    public User deleteUserById(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (!userOptional.isPresent()) {
+            throw new RuntimeException("User with ID " + id + " not found.");
+        }
+
+        User user = userOptional.get();
+        userRepository.deleteById(id);
+        return user;
     }
 }

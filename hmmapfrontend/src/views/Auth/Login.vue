@@ -1,12 +1,12 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <h2 class="title">欢迎登录</h2>
+      <h2 class="title">Welcome</h2>
       <el-form ref="loginForm" :model="loginForm" :rules="loginRules">
         <el-form-item prop="account">
           <el-input
             v-model="loginForm.account"
-            placeholder="请输入账号"
+            placeholder="Enter your username"
             prefix-icon="el-icon-user"
           ></el-input>
         </el-form-item>
@@ -14,7 +14,7 @@
           <el-input
             v-model="loginForm.password"
             type="password"
-            placeholder="请输入密码"
+            placeholder="Enter your password"
             prefix-icon="el-icon-lock"
             show-password
           ></el-input>
@@ -25,11 +25,11 @@
             class="login-btn"
             @click="handleLogin"
             :loading="loading"
-          >登录</el-button>
+          >Login</el-button>
         </el-form-item>
       </el-form>
       <div class="footer">
-        <span @click="goToRegister">还没有账号？立即注册</span>
+        <span @click="goToRegister">Don't have an account? Register now</span>
       </div>
     </div>
   </div>
@@ -46,10 +46,10 @@ export default {
       },
       loginRules: {
         account: [
-          { required: true, message: '请输入账号', trigger: 'blur' }
+          { required: true, message: 'Please enter your username', trigger: 'blur' }
         ],
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
+          { required: true, message: 'Please enter your password', trigger: 'blur' }
         ]
       },
       loading: false
@@ -60,15 +60,13 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          // 调用登录API
           this.$axios.post('/api/login', this.loginForm)
             .then(response => {
-              // 登录成功处理
-              this.$message.success('登录成功')
+              this.$message.success('Login successful')
               this.$router.push('/dashboard')
             })
             .catch(error => {
-              this.$message.error(error.response.data.message || '登录失败')
+              this.$message.error(error.response?.data?.message || 'Login failed')
             })
             .finally(() => {
               this.loading = false

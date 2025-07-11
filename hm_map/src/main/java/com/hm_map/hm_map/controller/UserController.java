@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -14,13 +15,31 @@ public class UserController {
 
     @PostMapping("/register")
     public Result register(@RequestBody User user) {
-        userService.register(user);
-        return Result.success();
+        try {
+            userService.register(user);
+            return Result.success("Registration successful");
+        } catch (Exception e) {
+            return Result.error("Registration failed: " + e.getMessage());
+        }
     }
 
     @PostMapping("/login")
     public Result login(@RequestBody User loginUser) {
-        userService.login(loginUser.getAccount(), loginUser.getPassword());
-        return Result.success();
+        try {
+            userService.login(loginUser.getAccount(), loginUser.getPassword());
+            return Result.success("Login successful");
+        } catch (Exception e) {
+            return Result.error("Login failed: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public Result deleteAccount(@PathVariable Long id) {
+        try {
+            userService.deleteUserById(id);
+            return Result.success("User deleted successfully");
+        } catch (Exception e) {
+            return Result.error("Deletion failed: " + e.getMessage());
+        }
     }
 }

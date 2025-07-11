@@ -1,52 +1,52 @@
 <template>
   <div class="register-container">
     <div class="register-box">
-      <h2 class="title">用户注册</h2>
-      <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="100px">
-        <el-form-item label="账号" prop="account">
-          <el-input v-model="registerForm.account" placeholder="请输入账号"></el-input>
+      <h2 class="title">User Registration</h2>
+      <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="120px">
+        <el-form-item label="Username" prop="account">
+          <el-input v-model="registerForm.account" placeholder="Enter username"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="registerForm.password" type="password" placeholder="请输入密码" show-password></el-input>
+        <el-form-item label="Password" prop="password">
+          <el-input v-model="registerForm.password" type="password" placeholder="Enter password" show-password></el-input>
         </el-form-item>
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="registerForm.name" placeholder="请输入姓名"></el-input>
+        <el-form-item label="Full Name" prop="name">
+          <el-input v-model="registerForm.name" placeholder="Enter your full name"></el-input>
         </el-form-item>
-        <el-form-item label="生日" prop="birthday">
+        <el-form-item label="Birthday" prop="birthday">
           <el-date-picker
             v-model="registerForm.birthday"
             type="date"
-            placeholder="选择生日"
+            placeholder="Select your birthday"
             value-format="yyyy-MM-dd"
             style="width: 100%"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="个人简介" prop="intro">
+        <el-form-item label="Bio" prop="intro">
           <el-input
             v-model="registerForm.intro"
             type="textarea"
             :rows="3"
-            placeholder="请简要介绍自己"
+            placeholder="Briefly introduce yourself"
           ></el-input>
         </el-form-item>
-        <el-form-item label="组织" prop="organization">
-          <el-input v-model="registerForm.organization" placeholder="请输入所属组织"></el-input>
+        <el-form-item label="Organization" prop="organization">
+          <el-input v-model="registerForm.organization" placeholder="Enter your organization"></el-input>
         </el-form-item>
-        <el-form-item label="部门" prop="department">
-          <el-input v-model="registerForm.department" placeholder="请输入部门"></el-input>
+        <el-form-item label="Department" prop="department">
+          <el-input v-model="registerForm.department" placeholder="Enter your department"></el-input>
         </el-form-item>
-        <el-form-item label="地址" prop="address">
-          <el-input v-model="registerForm.address" placeholder="请输入地址"></el-input>
+        <el-form-item label="Address" prop="address">
+          <el-input v-model="registerForm.address" placeholder="Enter your address"></el-input>
         </el-form-item>
-        <el-form-item label="邮编" prop="postCode">
-          <el-input v-model="registerForm.postCode" placeholder="请输入邮编"></el-input>
+        <el-form-item label="Postcode" prop="postCode">
+          <el-input v-model="registerForm.postCode" placeholder="Enter your postal code"></el-input>
         </el-form-item>
-        <el-form-item label="专业领域" prop="field">
-          <el-input v-model="registerForm.field" placeholder="请输入专业领域"></el-input>
+        <el-form-item label="Field" prop="field">
+          <el-input v-model="registerForm.field" placeholder="Enter your area of expertise"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleRegister" :loading="loading">注册</el-button>
-          <el-button @click="goToLogin">返回登录</el-button>
+          <el-button type="primary" @click="handleRegister" :loading="loading">Register</el-button>
+          <el-button @click="goToLogin">Back to Login</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -72,15 +72,15 @@ export default {
       },
       registerRules: {
         account: [
-          { required: true, message: '请输入账号', trigger: 'blur' },
-          { min: 4, max: 20, message: '长度在 4 到 20 个字符', trigger: 'blur' }
+          { required: true, message: 'Please enter a username', trigger: 'blur' },
+          { min: 4, max: 20, message: 'Length must be between 4 and 20 characters', trigger: 'blur' }
         ],
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
+          { required: true, message: 'Please enter a password', trigger: 'blur' },
+          { min: 6, max: 20, message: 'Length must be between 6 and 20 characters', trigger: 'blur' }
         ],
         name: [
-          { required: true, message: '请输入姓名', trigger: 'blur' }
+          { required: true, message: 'Please enter your full name', trigger: 'blur' }
         ]
       },
       loading: false
@@ -91,14 +91,13 @@ export default {
       this.$refs.registerForm.validate(valid => {
         if (valid) {
           this.loading = true
-          // 调用注册API
           this.$axios.post('/api/register', this.registerForm)
             .then(response => {
-              this.$message.success('注册成功')
+              this.$message.success('Registration successful')
               this.$router.push('/login')
             })
             .catch(error => {
-              this.$message.error(error.response.data.message || '注册失败')
+              this.$message.error(error.response.data.message || 'Registration failed')
             })
             .finally(() => {
               this.loading = false
