@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS paper (
     CONSTRAINT fk_paper_uploader FOREIGN KEY (uploader_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Academic Papers Table';
 
--- 索引示例
+
 CREATE INDEX idx_paper_title ON paper(title);
 CREATE INDEX idx_paper_keywords ON paper(keywords);
 CREATE INDEX idx_paper_doi ON paper(doi);
