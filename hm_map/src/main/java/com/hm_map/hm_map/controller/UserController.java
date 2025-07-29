@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/auth")
 public class UserController {
 
     @Autowired
@@ -16,8 +16,8 @@ public class UserController {
     @PostMapping("/register")
     public Result register(@RequestBody User user) {
         try {
-            userService.register(user);
-            return Result.success("Registration successful");
+            User newUser = userService.register(user);
+            return Result.success(newUser);
         } catch (Exception e) {
             return Result.error("Registration failed: " + e.getMessage());
         }
@@ -26,8 +26,8 @@ public class UserController {
     @PostMapping("/login")
     public Result login(@RequestBody User loginUser) {
         try {
-            userService.login(loginUser.getAccount(), loginUser.getPassword());
-            return Result.success("Login successful");
+            User user = userService.login(loginUser.getAccount(), loginUser.getPassword());
+            return Result.success(user);
         } catch (Exception e) {
             return Result.error("Login failed: " + e.getMessage());
         }
