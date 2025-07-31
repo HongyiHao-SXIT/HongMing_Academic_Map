@@ -4,6 +4,5 @@ import com.hm_map.hm_map.entity.User;
 
 public interface UserService {
     User register(User user);
-    User login(String account, String password);
-    User deleteUserById(Long id);
+    User login(String account, String rawPassword);
 }

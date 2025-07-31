@@ -1,95 +1,102 @@
 package com.hm_map.hm_map.controller;
 
 import com.hm_map.hm_map.entity.Paper;
-import com.hm_map.hm_map.entity.Result;
 import com.hm_map.hm_map.service.PaperService;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Date;
+import java.util.List;
+
 @RestController
-@RequestMapping("/papers")
+@RequestMapping("/api/papers")
 public class PaperController {
 
     @Autowired
     private PaperService paperService;
 
-    @GetMapping
-    public Result listPapers(
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) String author,
-            @RequestParam(required = false) String publication,
-            @RequestParam(required = false) String category,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "publishDate") String sortBy,
-            @RequestParam(defaultValue = "desc") String order) {
+    private final String UPLOAD_DIR = "uploads/";
 
-        return Result.success(paperService.findPapers(
-                keyword, author, publication, category, page, size, sortBy, order
-        ));
-    }
-
-    @GetMapping("/{id}")
-    public Result getPaper(@PathVariable Long id) {
-        Paper paper = paperService.getPaperById(id);
-        return paper != null ? Result.success(paper) : Result.error("Paper not found");
-    }
-
-    @PostMapping
-    public Result uploadPaper(@RequestBody Paper paper) {
-        return Result.success(paperService.savePaper(paper));
-    }
-
-    @PutMapping("/{id}")
-    public Result updatePaper(@PathVariable Long id, @RequestBody Paper paper) {
-        return Result.success(paperService.updatePaper(id, paper));
-    }
-
-    @DeleteMapping("/{id}")
-    public Result deletePaper(@PathVariable Long id) {
-        paperService.deletePaperById(id);
-        return Result.success("Paper deleted successfully");
-    }
-
-    @PostMapping("/uploadFile")
-    public Result uploadFile(@RequestParam("file") MultipartFile file) {
-        try {
-            String filePath = paperService.storeFile(file);
-            return Result.success(filePath);
-        } catch (Exception e) {
-            return Result.error("File upload failed: " + e.getMessage());
+    @PostMapping("/upload")
+    public Paper upload(@RequestParam("file") MultipartFile file,
+                        @RequestParam("title") String title,
+                        @RequestParam(value = "abstractText", required = false) String abstractText,
+                        @RequestParam(value = "authors", required = false) String authors,
+                        @RequestParam(value = "keywords", required = false) String keywords) throws IOException {
+        if (file.isEmpty()) {
+            throw new RuntimeException("File is empty");
         }
+        File uploadDir = new File(UPLOAD_DIR);
+        if (!uploadDir.exists()) uploadDir.mkdirs();
+        String originalFilename = file.getOriginalFilename();
+        String fileName = System.currentTimeMillis() + "_" + originalFilename;
+        File dest = new File(uploadDir, fileName);
+        file.transferTo(dest);
+        Paper paper = new Paper();
+        paper.setTitle(title);
+        paper.setAbstractText(abstractText);
+        paper.setAuthors(authors);
+        paper.setKeywords(keywords);
+        paper.setFilePath(dest.getAbsolutePath());
+        paper.setCreateTime(new Date());
+        paper.setUpdateTime(new Date());
+        paper.setIsPublic(true);
+        paper.setIsDeleted(false);
+        paper.setViewCount(0);
+        paper.setDownloadCount(0);
+        paper.setCitationCount(0);
+        return paperService.uploadPaper(paper);
     }
 
-    @GetMapping("/downloadFile/{filename}")
-    public void downloadFile(@PathVariable String filename, HttpServletResponse response) {
-        try {
-            paperService.downloadFile(filename, response);
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+    @GetMapping("/search")
+    public List<Paper> searchByTitle(@RequestParam String keyword) {
+        return paperService.searchByTitle(keyword);
+    }
+
+    @GetMapping("/keyword")
+    public List<Paper> searchByKeyword(@RequestParam String keyword) {
+        return paperService.searchByKeyword(keyword);
+    }
+
+    @GetMapping("/public")
+    public List<Paper> listPublic() {
+        return paperService.getAllPublicPapers();
+    }
+
+    @GetMapping("/list")
+    public List<Paper> listPapers(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Paper> paperPage = paperService.getPaperRepository().findAll(pageable);
+        return paperPage.stream()
+                .filter(p -> Boolean.TRUE.equals(p.getIsPublic()) && Boolean.FALSE.equals(p.getIsDeleted()))
+                .toList();
+    }
+
+    @GetMapping("/download/{id}")
+    public ResponseEntity<byte[]> downloadFile(@PathVariable Long id) throws IOException {
+        Paper paper = paperService.getPaperRepository().findById(id)
+                .orElseThrow(() -> new RuntimeException("Paper not found"));
+        if (paper.getFilePath() == null) {
+            throw new RuntimeException("File not found");
         }
-    }
-
-    @PostMapping("/uploadWithPaper")
-    public Result uploadWithPaper(@RequestParam("file") MultipartFile file,
-                                  @RequestParam("title") String title) {
-        try {
-            Paper paper = paperService.savePaperWithFile(file, title);
-            return Result.success(paper);
-        } catch (Exception e) {
-            return Result.error("Upload with paper failed: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/stats/keywords")
-    public Result getKeywordStats() {
-        return Result.success(paperService.getKeywordStats());
-    }
-
-    @GetMapping("/stats/publicationTrend")
-    public Result getPublicationTrend() {
-        return Result.success(paperService.getPublicationTrend());
+        Path path = Paths.get(paper.getFilePath());
+        byte[] data = Files.readAllBytes(path);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + path.getFileName().toString() + "\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(data);
     }
 }
