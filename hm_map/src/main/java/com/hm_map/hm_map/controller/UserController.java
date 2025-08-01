@@ -1,45 +1,81 @@
 package com.hm_map.hm_map.controller;
 
-import com.hm_map.hm_map.entity.Result;
 import com.hm_map.hm_map.entity.User;
-import com.hm_map.hm_map.service.UserService;
+import com.hm_map.hm_map.payload.AuthRequest;
+import com.hm_map.hm_map.payload.AuthResponse;
+import com.hm_map.hm_map.payload.RegisterRequest;
+import com.hm_map.hm_map.repository.UserRepository;
+import com.hm_map.hm_map.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public Result register(@RequestBody User user) {
-        try {
-            User newUser = userService.register(user);
-            return Result.success(newUser);
-        } catch (Exception e) {
-            return Result.error("Registration failed: " + e.getMessage());
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        if (userRepository.findByAccount(request.getAccount()).isPresent()) {
+            return ResponseEntity.badRequest().body("Account already exists");
         }
+
+        User user = new User();
+        user.setAccount(request.getAccount());
+        user.setName(request.getName());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
+
+        return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping("/login")
-    public Result login(@RequestBody User loginUser) {
+    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
-            User user = userService.login(loginUser.getAccount(), loginUser.getPassword());
-            return Result.success(user);
-        } catch (Exception e) {
-            return Result.error("Login failed: " + e.getMessage());
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getAccount(), request.getPassword()));
+
+
+            String role = "ROLE_USER";
+            String token = jwtTokenProvider.createToken(request.getAccount(), role);
+
+            return ResponseEntity.ok(new AuthResponse(token));
+        } catch (BadCredentialsException ex) {
+            return ResponseEntity.status(401).body("Invalid username or password");
         }
     }
-
-    @DeleteMapping("/{id}")
-    public Result deleteAccount(@PathVariable Long id) {
-        try {
-            userService.deleteUserById(id);
-            return Result.success("User deleted successfully");
-        } catch (Exception e) {
-            return Result.error("Deletion failed: " + e.getMessage());
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).body("Unauthorized");
         }
+
+        String account = authentication.getName();
+        Optional<User> userOpt = userRepository.findByAccount(account);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(404).body("User not found");
+        }
+
+        User user = userOpt.get();
+        user.setPassword(null);
+
+        return ResponseEntity.ok(user);
     }
 }
