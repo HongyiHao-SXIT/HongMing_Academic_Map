@@ -27,6 +27,8 @@ public class Paper {
     private String type;
     private String categories;
 
+    private String tags;
+
     @Column(name = "file_path")
     private String filePath;
 
@@ -39,4 +41,7 @@ public class Paper {
 
     private Date createTime;
     private Date updateTime;
+
+    public String getTags() { return tags; }
+    public void setTags(String tags) { this.tags = tags; }
 }

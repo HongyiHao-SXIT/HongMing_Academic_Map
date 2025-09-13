@@ -86,7 +86,6 @@ public class PaperServiceImpl implements PaperService {
         Paper existing = paperRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Paper not found"));
 
-        // 管理员权限允许修改所有字段，包括是否公开、是否删除等
         existing.setTitle(updated.getTitle());
         existing.setAbstractText(updated.getAbstractText());
         existing.setAuthors(updated.getAuthors());
