@@ -1,2 +1,0 @@
-# HongMIng Academic Map
-

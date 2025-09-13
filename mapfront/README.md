@@ -1,4 +1,4 @@
-# hmmapfront
+# mapfront
 
 ## Project setup
 ```
