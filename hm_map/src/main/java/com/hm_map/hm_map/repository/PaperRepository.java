@@ -25,7 +25,7 @@ public interface PaperRepository extends PagingAndSortingRepository<Paper, Long>
 
     List<Paper> findByIsPublicTrueAndIsDeletedFalse();
 
-    Page<Paper> findByIsDeletedFalse(Pageable pageable);
+    //Page<Paper> findByIsDeletedFalse(Pageable pageable);
 
     Optional<Paper> findByIdAndIsDeletedFalse(Long id);
 

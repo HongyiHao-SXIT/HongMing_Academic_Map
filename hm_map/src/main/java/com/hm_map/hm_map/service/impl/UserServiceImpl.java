@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -26,10 +28,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(String account, String rawPassword) {
-        User user = userRepository.findByAccount(account);
-        if (user == null || !passwordEncoder.matches(rawPassword, user.getPassword())) {
-            throw new RuntimeException("Invalid account or password");
-        }
+        Optional<User> userOpt = userRepository.findByAccount(account);
+        User user = userOpt
+                .filter(u -> passwordEncoder.matches(rawPassword, u.getPassword()))
+                .orElseThrow(() -> new RuntimeException("Invalid account or password"));
+        
         return user;
     }
 }
