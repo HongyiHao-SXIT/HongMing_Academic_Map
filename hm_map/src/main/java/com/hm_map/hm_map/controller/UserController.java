@@ -33,12 +33,8 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /**
-     * Register a new user
-     */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        // Check if account already exists
         if (userRepository.findByAccount(request.getAccount()).isPresent()) {
             return ResponseEntity.badRequest().body("Account already exists");
         }
@@ -47,15 +43,14 @@ public class UserController {
         user.setAccount(request.getAccount());
         user.setName(request.getName());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setAddress(request.setAddress());
+        user.getBirthday(request.getAdress());
 
         userRepository.save(user);
 
         return ResponseEntity.ok("User registered successfully");
     }
 
-    /**
-     * Login and return JWT token
-     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
@@ -66,7 +61,6 @@ public class UserController {
                     )
             );
 
-            // Here we just give every user a default role
             String role = "ROLE_USER";
             String token = jwtTokenProvider.createToken(request.getAccount(), role);
 
@@ -76,9 +70,6 @@ public class UserController {
         }
     }
 
-    /**
-     * Get current logged-in user info
-     */
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -90,7 +81,6 @@ public class UserController {
 
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-            // Hide password before returning
             user.setPassword(null);
             return ResponseEntity.ok(user);
         } else {

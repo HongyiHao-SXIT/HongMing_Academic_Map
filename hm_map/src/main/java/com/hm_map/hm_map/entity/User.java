@@ -46,4 +46,8 @@ public class User {
 
     public boolean isDeleted() { return isDeleted; }
     public void setIsDeleted(boolean deleted) { isDeleted = deleted; }
+
+    public void setAddress(String address){
+        this.address = address;
+    }
 }
