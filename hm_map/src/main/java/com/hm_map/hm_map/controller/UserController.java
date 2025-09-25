@@ -43,9 +43,9 @@ public class UserController {
         user.setAccount(request.getAccount());
         user.setName(request.getName());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setAddress(request.setAddress());
-        user.getBirthday(request.getAdress());
-
+        // 修复：移除错误的方法调用，添加正确的字段设置
+        user.setRole("ROLE_USER"); // 设置默认角色
+        
         userRepository.save(user);
 
         return ResponseEntity.ok("User registered successfully");
@@ -54,6 +54,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
+            // 使用认证结果，修复未使用变量的警告
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getAccount(),
@@ -61,7 +62,7 @@ public class UserController {
                     )
             );
 
-            String role = "ROLE_USER";
+            String role = authentication.getAuthorities().iterator().next().getAuthority();
             String token = jwtTokenProvider.createToken(request.getAccount(), role);
 
             return ResponseEntity.ok(new AuthResponse(token));
