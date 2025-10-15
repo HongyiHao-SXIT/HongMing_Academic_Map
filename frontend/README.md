@@ -1,4 +1,4 @@
-# mapfront
+# frontend
 
 ## Project setup
 ```
