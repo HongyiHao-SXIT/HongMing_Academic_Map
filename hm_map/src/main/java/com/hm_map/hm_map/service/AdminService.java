@@ -6,17 +6,17 @@ import org.springframework.data.domain.Page;
 
 public interface AdminService {
 
-    Page<User> getAllUsers(int page, int size);
+  Page<User> getAllUsers(int page, int size);
 
-    void setUserRole(Long userId, String role);
+  void setUserRole(Long userId, String role);
 
-    void deleteUser(Long userId);
+  void deleteUser(Long userId);
 
-    Page<Paper> getAllPapers(int page, int size);
+  Page<Paper> getAllPapers(int page, int size);
 
-    void approvePaper(Long paperId);
+  void approvePaper(Long paperId);
 
-    void deletePaper(Long paperId);
+  void deletePaper(Long paperId);
 
-    Object getDashboardStats();
+  Object getDashboardStats();
 }

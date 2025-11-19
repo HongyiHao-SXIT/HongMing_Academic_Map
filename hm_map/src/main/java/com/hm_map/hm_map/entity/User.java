@@ -1,8 +1,8 @@
 package com.hm_map.hm_map.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
 import java.util.Date;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
@@ -11,43 +11,53 @@ import java.util.Date;
 @Table(name = "users")
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String name;
+  private String name;
 
-    private String account;
+  private String account;
 
-    private String password;
+  private String password;
 
-    @Temporal(TemporalType.DATE)
-    private Date birthday;
+  @Temporal(TemporalType.DATE)
+  private Date birthday;
 
-    private String intro;
+  private String intro;
 
-    private String organization;
+  private String organization;
 
-    private String department;
+  private String department;
 
-    private String address;
+  private String address;
 
-    private String postCode;
+  private String postCode;
 
-    private String field;
+  private String field;
 
-    private String tags;
+  private String tags;
 
-    private String role;
-    private boolean isDeleted;
+  private String role;
+  private boolean isDeleted;
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+  public String getRole() {
+    return role;
+  }
 
-    public boolean isDeleted() { return isDeleted; }
-    public void setIsDeleted(boolean deleted) { isDeleted = deleted; }
+  public void setRole(String role) {
+    this.role = role;
+  }
 
-    public void setAddress(String address){
-        this.address = address;
-    }
+  public boolean isDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(boolean deleted) {
+    isDeleted = deleted;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
 }

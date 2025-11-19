@@ -11,43 +11,42 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/admin")
 public class AdminController {
 
-    @Autowired
-    private AdminService adminService;
+  @Autowired private AdminService adminService;
 
-    @GetMapping("/users")
-    public Page<User> getUsers(@RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "10") int size) {
-        return adminService.getAllUsers(page, size);
-    }
+  @GetMapping("/users")
+  public Page<User> getUsers(
+      @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    return adminService.getAllUsers(page, size);
+  }
 
-    @PutMapping("/users/{id}/role")
-    public void setUserRole(@PathVariable Long id, @RequestParam String role) {
-        adminService.setUserRole(id, role);
-    }
+  @PutMapping("/users/{id}/role")
+  public void setUserRole(@PathVariable Long id, @RequestParam String role) {
+    adminService.setUserRole(id, role);
+  }
 
-    @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        adminService.deleteUser(id);
-    }
+  @DeleteMapping("/users/{id}")
+  public void deleteUser(@PathVariable Long id) {
+    adminService.deleteUser(id);
+  }
 
-    @GetMapping("/papers")
-    public Page<Paper> getPapers(@RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "10") int size) {
-        return adminService.getAllPapers(page, size);
-    }
+  @GetMapping("/papers")
+  public Page<Paper> getPapers(
+      @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    return adminService.getAllPapers(page, size);
+  }
 
-    @PutMapping("/papers/{id}/approve")
-    public void approvePaper(@PathVariable Long id) {
-        adminService.approvePaper(id);
-    }
+  @PutMapping("/papers/{id}/approve")
+  public void approvePaper(@PathVariable Long id) {
+    adminService.approvePaper(id);
+  }
 
-    @DeleteMapping("/papers/{id}")
-    public void deletePaper(@PathVariable Long id) {
-        adminService.deletePaper(id);
-    }
+  @DeleteMapping("/papers/{id}")
+  public void deletePaper(@PathVariable Long id) {
+    adminService.deletePaper(id);
+  }
 
-    @GetMapping("/stats")
-    public Object getStats() {
-        return adminService.getDashboardStats();
-    }
+  @GetMapping("/stats")
+  public Object getStats() {
+    return adminService.getDashboardStats();
+  }
 }
