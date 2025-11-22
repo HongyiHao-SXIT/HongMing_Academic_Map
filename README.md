@@ -80,7 +80,7 @@ src/
 │   ├── HomePage.vue
 │   ├── LoginPage.vue
 │   ├── RegisterPage.vue
-│   ├── UserProfile.vue
+│   ├── RegisterPage.vue
 │   ├── UploadPage.vue
 │   ├── PaperDetail.vue
 │   └── AdminPanel.vue
